@@ -1,5 +1,8 @@
 var issueContainerEl = document.querySelector('#issues-container');
 var limitWarningEl = document.querySelector('#limit-warning');
+var repoNameEl = document.querySelector('#repo-name');
+
+
 const displayIssues = (issues)=> {
 
     if(issues.length === 0){
@@ -44,7 +47,7 @@ const getRepoIssues = (repo) => {
                 }
             })
         } else {
-            alert('There was a problem with your request')
+            document.location.replace('./index.html');
         }
     })
 }
@@ -60,5 +63,14 @@ const displayWarning = (repo) =>{
     limitWarningEl.textContent = `To see more than 30 issues, visit: `;
     limitWarningEl.appendChild(linkEl);
 }
-
-getRepoIssues('facebook/react');
+const getRepoName = () => {
+    let repoName = document.location.search.split('=')[1];
+    if(repoName){
+    getRepoIssues(repoName);
+    repoNameEl.textContent =repoName;
+    } else {
+        document.location.replace('./index.html')
+    }
+}
+let repoName = document.location.search.split('=')[1];
+getRepoName();
