@@ -1,5 +1,5 @@
 var issueContainerEl = document.querySelector('#issues-container');
-
+var limitWarningEl = document.querySelector('#limit-warning');
 const displayIssues = (issues)=> {
 
     if(issues.length === 0){
@@ -38,6 +38,10 @@ const getRepoIssues = (repo) => {
         if(response.ok){
             response.json().then(function(data){
                 displayIssues(data);
+
+                if(response.headers.get('link')){
+                    displayWarning(repo);
+                }
             })
         } else {
             alert('There was a problem with your request')
@@ -45,4 +49,16 @@ const getRepoIssues = (repo) => {
     })
 }
 
-getRepoIssues('theresarutledge/daily-planner');
+const displayWarning = (repo) =>{
+    let link = `https://github.com/${repo}/issues`;
+
+    let linkEl = document.createElement('a');
+    linkEl.setAttribute('href',link);
+    linkEl.setAttribute('target','_blank');
+    linkEl.textContent = 'See More Issues on GitHub.com';
+
+    limitWarningEl.textContent = `To see more than 30 issues, visit: `;
+    limitWarningEl.appendChild(linkEl);
+}
+
+getRepoIssues('facebook/react');
